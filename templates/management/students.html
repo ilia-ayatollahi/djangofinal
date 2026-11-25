@@ -1,0 +1,100 @@
+
+{% extends 'base.html' %}
+
+{% block title %}مدیریت دانشجویان — Sematec Academy{% endblock %}
+
+{% block content %}
+<section class="wrap pt-12 pb-6">
+    <p class="eyebrow">Management</p>
+    <h1 class="h-display mt-3 text-4xl sm:text-5xl">
+        مدیریت دانشجویان
+    </h1>
+    <p class="mt-3 text-muted">
+        فهرست دانشجویان ثبت‌نام‌شده در دوره‌های آکادمی
+    </p>
+</section>
+
+<div class="wrap pb-10">
+    <div class="flex flex-wrap gap-3 mb-6">
+        <a href="{% url 'course_app:management_dashboard' %}"
+           class="btn btn-secondary">
+            بازگشت به داشبورد
+        </a>
+        <a href="{% url 'course_app:management_courses' %}"
+           class="btn btn-secondary">
+            مدیریت دوره‌ها
+        </a>
+    </div>
+
+    <div class="card p-5 overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr>
+                    <th class="p-3 text-right">نام کاربری</th>
+                    <th class="p-3 text-right">ایمیل</th>
+                    <th class="p-3 text-right">شماره تماس</th>
+                    <th class="p-3 text-right">تاریخ تولد</th>
+                    <th class="p-3 text-right">کد ملی</th>
+                    <th class="p-3 text-right">نام پدر</th>
+                    <th class="p-3 text-right">شهر</th>
+                    <th class="p-3 text-right">آدرس</th>
+                    <th class="p-3 text-right">تعداد دوره‌ها</th>
+                    <th class="p-3 text-right">دوره‌های ثبت‌نام‌شده</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td class="p-3">{{ student.username }}</td>
+                    <td class="p-3">{{ student.email|default:"—" }}</td>
+
+                    <td class="p-3">
+                        {{ student.profile.phone_number|default:"—" }}
+                    </td>
+
+                    <td class="p-3">
+                        {{ student.profile.birth_date|date:"Y/m/d"|default:"—" }}
+                    </td>
+
+                    <td class="p-3">
+                        {{ student.profile.national_code|default:"—" }}
+                    </td>
+
+                    <td class="p-3">
+                        {{ student.profile.father_name|default:"—" }}
+                    </td>
+
+                    <td class="p-3">
+                        {{ student.profile.city|default:"—" }}
+                    </td>
+
+                    <td class="p-3">
+                        {{ student.profile.address|default:"—" }}
+                    </td>
+
+                    <td class="p-3">
+                        {{ student.enrolled_courses.count }}
+                    </td>
+
+                    <td class="p-3">
+                        {% for course in student.enrolled_courses.all %}
+                            <span>{{ course.title }}</span>{% if not forloop.last %}، {% endif %}
+                        {% empty %}
+                            —
+                        {% endfor %}
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="10" class="p-5 text-center">
+                        هنوز دانشجویی در دوره‌ها ثبت‌نام نکرده است.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

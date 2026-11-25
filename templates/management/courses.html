@@ -1,0 +1,136 @@
+
+{% extends 'base.html' %}
+
+{% block title %}مدیریت دوره‌ها — Sematec Academy{% endblock %}
+
+{% block content %}
+<section class="wrap pt-12 pb-6">
+    <p class="eyebrow">Management</p>
+    <h1 class="h-display mt-3 text-4xl sm:text-5xl">
+        مدیریت دوره‌ها
+    </h1>
+    <p class="mt-3 text-muted">
+        مشاهده، ویرایش و حذف دوره‌های آکادمی
+    </p>
+</section>
+
+<div class="wrap pb-10">
+    <div class="flex flex-wrap gap-3 mb-6">
+        <a href="{% url 'course_app:course_create' %}"
+           class="btn btn-primary">
+            افزودن دوره جدید
+        </a>
+        <a href="{% url 'course_app:management_dashboard' %}"
+           class="btn btn-secondary">
+            بازگشت به داشبورد
+        </a>
+    </div>
+<form method="get" class="card p-5 mb-6">
+    <div class="grid gap-4 md:grid-cols-3">
+
+        <div>
+            <label class="block mb-2 text-sm font-bold">
+                نام دوره
+            </label>
+            <input
+                type="text"
+                name="search"
+                value="{{ search_query }}"
+                placeholder="جست‌وجوی نام دوره..."
+                class="input w-full"
+            >
+        </div>
+
+        <div>
+            <label class="block mb-2 text-sm font-bold">
+                نام مدرس
+            </label>
+            <input
+                type="text"
+                name="teacher"
+                value="{{ teacher_query }}"
+                placeholder="جست‌وجوی نام مدرس..."
+                class="input w-full"
+            >
+        </div>
+
+        <div>
+            <label class="block mb-2 text-sm font-bold">
+                دسته‌بندی
+            </label>
+            <select name="category" class="input w-full">
+                <option value="">همه دسته‌بندی‌ها</option>
+
+                {% for category in categories %}
+                    <option
+                        value="{{ category.id }}"
+                        {% if selected_category == category.id|stringformat:'s' %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-5">
+        <button type="submit" class="btn btn-primary">
+            اعمال فیلترها
+        </button>
+
+        <a href="{% url 'course_app:management_courses' %}"
+           class="btn btn-secondary">
+            پاک کردن فیلترها
+        </a>
+    </div>
+</form>
+    <div class="card p-5 overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr>
+                    <th class="p-3 text-right">نام دوره</th>
+                    <th class="p-3 text-right">مدرس</th>
+                    <th class="p-3 text-right">قیمت</th>
+                    <th class="p-3 text-right">ثبت‌نام</th>
+                    <th class="p-3 text-right">ظرفیت</th>
+                    <th class="p-3 text-right">عملیات</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td class="p-3">{{ course.title }}</td>
+                    <td class="p-3">{{ course.teacher }}</td>
+                    <td class="p-3">{{ course.price }} تومان</td>
+                    <td class="p-3">{{ course.students_count }}</td>
+                    <td class="p-3">{{ course.capacity }}</td>
+                    <td class="p-3">
+                        <div class="flex flex-wrap gap-2">
+                            <a href="{% url 'course_app:course_update' course.pk %}"
+                               class="btn btn-secondary">
+                                ویرایش
+                            </a>
+
+                            <a href="{% url 'course_app:course_delete' course.pk %}"
+                               class="btn btn-secondary">
+                                حذف
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="p-5 text-center">
+                        هنوز دوره‌ای ثبت نشده است.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

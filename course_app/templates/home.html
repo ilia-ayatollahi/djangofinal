@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% block title %}
+صفحه اصلی | Sematec Academy
+{% endblock %}
+
+{% block page_name %}home{% endblock %}
+
+{% block content %}
+
+<section class="wrap grid items-center gap-12 py-16 lg:grid-cols-2 lg:py-24">
+
+    <div>
+        <span class="inline-flex rounded-full bg-leaf-100 px-4 py-2 text-sm font-bold text-leaf-800 dark:bg-leaf-400/15 dark:text-leaf-200">
+            مسیر یادگیری از اینجا شروع می‌شود
+        </span>
+
+        <h1 class="mt-6 text-4xl font-extrabold leading-[1.5] tracking-tight sm:text-5xl">
+            مهارت‌های امروز،
+            <span class="text-leaf-700 dark:text-leaf-300">
+                فرصت‌های فردا
+            </span>
+        </h1>
+
+        <p class="mt-6 max-w-xl text-lg leading-9 text-ink/65 dark:text-white/65">
+            با دوره‌های کاربردی و آموزش هدفمند، دانش خود را به مهارت تبدیل کنید و برای آینده حرفه‌ای خود آماده شوید.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+
+            <a href="{% url 'course_app:course_list' %}" class="btn btn-primary">
+                مشاهده دوره‌ها
+            </a>
+
+            {% if not user.is_authenticated %}
+                <a href="{% url 'course_app:register' %}" class="btn btn-sun">
+                    ثبت‌نام رایگان
+                </a>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div class="relative">
+        <div class="absolute -inset-4 rounded-[2rem] bg-leaf-100/70 blur-2xl dark:bg-leaf-400/10"></div>
+
+        <div class="relative overflow-hidden rounded-[2rem] border border-leaf-900/10 bg-gradient-to-br from-leaf-100 via-white to-sun-100 p-10 dark:border-white/10 dark:from-leaf-900 dark:via-night dark:to-[#423513]">
+
+            <div class="rounded-3xl bg-white/80 p-8 shadow-xl backdrop-blur dark:bg-white/10">
+
+                <div class="text-5xl">🎓</div>
+
+                <h2 class="mt-6 text-2xl font-extrabold">
+                    یادگیری، سرمایه‌گذاری روی آینده
+                </h2>
+
+                <p class="mt-4 leading-8 text-ink/65 dark:text-white/65">
+                    دانش را به تجربه و تجربه را به فرصت تبدیل کنید.
+                </p>
+
+                <div class="mt-8 flex items-center justify-between border-t border-ink/10 pt-5 dark:border-white/10">
+                    <span class="text-sm font-bold">شروع مسیر حرفه‌ای</span>
+                    <span class="text-2xl text-leaf-700 dark:text-leaf-300">←</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<section class="wrap py-16">
+
+    <div class="flex flex-wrap items-end justify-between gap-4">
+
+        <div>
+            <span class="text-sm font-bold text-leaf-700 dark:text-leaf-300">
+                یادگیری را شروع کنید
+            </span>
+
+            <h2 class="mt-3 text-3xl font-extrabold">
+                دوره‌های منتخب
+            </h2>
+
+            <p class="mt-3 text-ink/60 dark:text-white/60">
+                جدیدترین دوره‌های آموزشی آکادمی را ببینید.
+            </p>
+        </div>
+
+        <a href="{% url 'course_app:course_list' %}" class="btn btn-primary">
+            مشاهده همه دوره‌ها
+        </a>
+
+    </div>
+
+    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+        {% for course in featured_courses %}
+
+            <article class="card course-card overflow-hidden">
+
+<div class="cover overflow-hidden"
+     style="background: linear-gradient(135deg, #19693a, #d9f5e0);">
+
+    {% if course.image %}
+        <img src="{{ course.image.url }}"
+             alt="{{ course.title }}"
+             class="h-full w-full object-cover">
+    {% else %}
+        <div class="flex h-full w-full flex-col items-center justify-center gap-3">
+            <span class="text-5xl">🎓</span>
+            <span class="text-sm font-bold text-leaf-900">
+                Sematec Academy
+            </span>
+        </div>
+    {% endif %}
+
+</div>
+
+                <div class="p-6">
+
+                    <h3 class="text-xl font-extrabold">
+                        {{ course.title }}
+                    </h3>
+
+                    <p class="mt-3 line-clamp-3 leading-7 text-ink/60 dark:text-white/60">
+                        {{ course.description }}
+                    </p>
+
+                    <div class="mt-6 flex items-center justify-between">
+
+                        <span class="font-bold text-leaf-700 dark:text-leaf-300">
+                            {{ course.price }} تومان
+                        </span>
+
+                        <a href="{% url 'course_app:course_detail' course.pk %}"
+                           class="btn btn-primary">
+                            جزئیات دوره
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        {% empty %}
+
+            <p class="col-span-full py-10 text-center text-ink/60 dark:text-white/60">
+                هنوز دوره‌ای برای نمایش ثبت نشده است.
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<section class="wrap py-16">
+
+    <div class="mx-auto max-w-2xl text-center">
+
+        <span class="text-sm font-bold text-leaf-700 dark:text-leaf-300">
+            تجربه‌ای فراتر از آموزش
+        </span>
+
+        <h2 class="mt-3 text-3xl font-extrabold">
+            چرا سماتک آکادمی؟
+        </h2>
+
+        <p class="mt-4 leading-8 text-ink/60 dark:text-white/60">
+            هدف ما فقط انتقال دانش نیست؛ می‌خواهیم به شما کمک کنیم مهارت‌هایی بسازید که در دنیای واقعی کاربرد دارند.
+        </p>
+
+    </div>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+
+        <article class="card p-7">
+
+            <div class="grid size-14 place-items-center rounded-2xl bg-leaf-100 text-3xl dark:bg-leaf-400/15">
+                🎯
+            </div>
+
+            <h3 class="mt-6 text-xl font-extrabold">
+                یادگیری هدفمند
+            </h3>
+
+            <p class="mt-3 leading-8 text-ink/60 dark:text-white/60">
+                مسیر آموزشی مشخص و ساختاریافته برای حرکت از سطح پایه تا مهارت‌های پیشرفته.
+            </p>
+
+        </article>
+
+        <article class="card p-7">
+
+            <div class="grid size-14 place-items-center rounded-2xl bg-sun-100 text-3xl dark:bg-sun-400/15">
+                💡
+            </div>
+
+            <h3 class="mt-6 text-xl font-extrabold">
+                آموزش کاربردی
+            </h3>
+
+            <p class="mt-3 leading-8 text-ink/60 dark:text-white/60">
+                تمرکز بر دانش و مهارت‌هایی که می‌توانید در پروژه‌ها و محیط کار از آن‌ها استفاده کنید.
+            </p>
+
+        </article>
+
+        <article class="card p-7">
+
+            <div class="grid size-14 place-items-center rounded-2xl bg-leaf-100 text-3xl dark:bg-leaf-400/15">
+                🚀
+            </div>
+
+            <h3 class="mt-6 text-xl font-extrabold">
+                رشد حرفه‌ای
+            </h3>
+
+            <p class="mt-3 leading-8 text-ink/60 dark:text-white/60">
+                تقویت توانایی‌های فردی و تخصصی برای ساختن آینده شغلی بهتر.
+            </p>
+
+        </article>
+
+    </div>
+
+</section>
+
+<section class="py-16" style="background-color: #19693a; color: #ffffff;">
+    <div class="wrap">
+
+        <div class="mx-auto max-w-2xl text-center">
+
+            <h2 class="text-3xl font-extrabold">
+                یادگیری با آمار واقعی
+            </h2>
+
+            <p class="mt-4 leading-8 text-white/70">
+                هر دوره، فرصتی تازه برای یادگیری و پیشرفت.
+            </p>
+
+        </div>
+
+        <div class="mt-12 grid gap-8 text-center sm:grid-cols-2">
+
+            <div>
+                <div class="text-4xl font-extrabold">
+                    {{ total_courses }}
+                </div>
+
+                <p class="mt-3 text-white/70">
+                    دوره آموزشی
+                </p>
+            </div>
+
+            <div>
+                <div class="text-4xl font-extrabold">
+                    {{ total_students }}
+                </div>
+
+                <p class="mt-3 text-white/70">
+                    ثبت‌نام در دوره‌ها
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="wrap py-16">
+
+    <div class="overflow-hidden rounded-[2rem] p-8 text-white sm:p-12"
+         style="background: linear-gradient(135deg, #19693a, #0d4225);">
+
+        <div class="mx-auto max-w-2xl text-center">
+
+            <span class="text-sm font-bold text-white/75">
+                قدم بعدی با شماست
+            </span>
+
+            <h2 class="mt-4 text-3xl font-extrabold leading-relaxed sm:text-4xl">
+                آماده‌ای مسیر یادگیری خودت رو شروع کنی؟
+            </h2>
+
+            <p class="mt-4 leading-8 text-white/80">
+                دوره مناسب خودت رو پیدا کن، مهارت‌های جدید یاد بگیر و برای آینده حرفه‌ای‌ات قدم بردار.
+            </p>
+
+            <div class="mt-8 flex flex-wrap justify-center gap-3">
+
+                <a href="{% url 'course_app:course_list' %}"
+                   class="btn btn-sun">
+                    مشاهده دوره‌ها
+                </a>
+
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'course_app:register' %}"
+                       class="inline-flex items-center justify-center rounded-full border border-white/40 px-6 py-3 font-bold text-white transition hover:bg-white/10">
+                        ثبت‌نام رایگان
+                    </a>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

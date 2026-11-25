@@ -1,0 +1,96 @@
+
+{% extends 'base.html' %}
+
+{% block title %}مدیریت دسته‌بندی‌ها — Sematec Academy{% endblock %}
+
+{% block content %}
+<section class="wrap pt-12 pb-6">
+    <p class="eyebrow">Management</p>
+    <h1 class="h-display mt-3 text-4xl sm:text-5xl">
+        مدیریت دسته‌بندی‌ها
+    </h1>
+    <p class="mt-3 text-muted">
+        ایجاد و مشاهده دسته‌بندی‌های دوره‌های آکادمی
+    </p>
+</section>
+
+<div class="wrap pb-10">
+
+    <div class="flex flex-wrap gap-3 mb-6">
+        <a href="{% url 'course_app:management_dashboard' %}"
+           class="btn btn-secondary">
+            بازگشت به داشبورد
+        </a>
+        <a href="{% url 'course_app:management_courses' %}"
+           class="btn btn-secondary">
+            مدیریت دوره‌ها
+        </a>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+
+        <div class="card p-6">
+            <h2 class="text-xl font-bold mb-5">
+                ایجاد دسته‌بندی جدید
+            </h2>
+
+            <form method="post" class="space-y-5">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div>
+                        <label class="label"
+                               for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        {% for error in field.errors %}
+                            <p class="mt-1 text-sm"
+                               style="color: #e11d48;">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary">
+                    ثبت دسته‌بندی
+                </button>
+            </form>
+        </div>
+
+        <div class="card p-6">
+            <h2 class="text-xl font-bold mb-5">
+                دسته‌بندی‌های موجود
+            </h2>
+
+            <div class="space-y-4">
+                {% for category in categories %}
+                    <div class="rounded-xl p-4"
+                         style="border: 1px solid #e5e7eb;">
+
+                        <h3 class="font-bold">
+                            {{ category.name }}
+                        </h3>
+
+                        <p class="mt-2 text-sm text-muted">
+                            {{ category.description|default:"بدون توضیحات" }}
+                        </p>
+
+                        <p class="mt-2 text-xs text-muted">
+                            تعداد دوره‌ها: {{ category.courses.count }}
+                        </p>
+                    </div>
+                {% empty %}
+                    <p class="text-sm text-muted">
+                        هنوز دسته‌بندی‌ای ایجاد نشده است.
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

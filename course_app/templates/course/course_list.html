@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}فهرست دوره‌ها — Sematec Academy{% endblock %}
+
+{% block content %}
+<section class="wrap pt-12 pb-6">
+    {% if user.is_staff %}
+    <a href="{% url 'course_app:course_create' %}"
+       class="btn btn-primary mt-5">
+        افزودن دوره جدید +
+    </a>
+{% endif %}
+    <p class="eyebrow">Catalog</p>
+    <h1 class="h-display mt-3 text-4xl sm:text-5xl">فهرست دوره‌ها</h1>
+</section>
+<div class="wrap pb-6">
+    <div class="flex flex-wrap items-center gap-3">
+
+        <a href="{% url 'course_app:course_list' %}"
+           class="tag {% if not selected_category %}tag-level{% endif %}">
+            همه دوره‌ها
+        </a>
+
+        {% for category in categories %}
+            <a href="?category={{ category.id }}"
+               class="tag {% if selected_category == category.id|stringformat:'s' %}tag-level{% endif %}">
+                {{ category.name }}
+            </a>
+        {% endfor %}
+
+    </div>
+</div>
+<div class="wrap pb-10">
+    {% if courses %}
+    <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        {% for course in courses %}
+        <article class="course-card group">
+<div class="cover" style="background: linear-gradient(135deg, #19693a, #d9f5e0);">
+
+    {% if course.image %}
+        <img src="{{ course.image.url }}"
+             alt="{{ course.title }}"
+             class="w-full h-full object-cover">
+    {% endif %}
+
+    {% if course.is_full %}
+        <span class="tag tag-sun absolute top-3 left-3 shadow-sm">
+            تکمیل ظرفیت
+        </span>
+    {% endif %}
+
+</div>
+            <div class="flex flex-1 flex-col p-5">
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="tag tag-level">{{ course.get_level_display }}</span>
+                    {% if course.category %}
+    <span class="tag">{{ course.category.name }}</span>
+{% endif %}
+                    {% if course.certificate %}<span class="tag tag-free">گواهینامه</span>{% endif %}
+                </div>
+                <h3 class="mt-2.5 text-lg leading-snug font-extrabold tracking-tight text-ink dark:text-white">
+                    <a class="stretched focus-visible:outline-none" href="{% url 'course_app:course_detail' course.pk %}">{{ course.title }}</a>
+                </h3>
+                <p class="mt-1 text-sm muted">{{ course.teacher }}</p>
+                <div class="mt-2.5 flex items-center gap-1.5 text-sm">
+                    <span class="font-extrabold">{{ course.rate|floatformat:1 }}</span>
+                    <span style="color: #ffc727;">★</span>
+                </div>
+                <div class="mt-auto flex items-center justify-between gap-3 border-t border-ink/10 pt-4 text-sm dark:border-white/10" style="margin-top:auto;padding-top:1rem">
+                    <span class="muted">{{ course.duration }} ساعت</span>
+                    {% if course.price %}
+                        <span class="font-extrabold text-ink dark:text-white">{{ course.price|floatformat:"0g" }} تومان</span>
+                    {% else %}
+                        <span class="tag tag-free">رایگان</span>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card p-10 text-center">
+        <p class="text-xl font-extrabold">هنوز دوره‌ای ثبت نشده است.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

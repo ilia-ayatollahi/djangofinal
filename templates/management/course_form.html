@@ -1,0 +1,52 @@
+
+{% extends 'base.html' %}
+
+{% block title %}ویرایش دوره — پنل مدیریت{% endblock %}
+
+{% block content %}
+<section class="wrap pt-12 pb-6">
+    <p class="eyebrow">Management</p>
+    <h1 class="h-display mt-3 text-4xl sm:text-5xl">
+        ویرایش دوره: {{ course.title }}
+    </h1>
+</section>
+
+<div class="wrap pb-10">
+    <form method="post" enctype="multipart/form-data"
+          class="card max-w-2xl space-y-5 p-7 sm:p-8">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div>
+                {% if field.name == 'certificate' %}
+                    <label class="flex items-center gap-2.5 text-sm font-semibold">
+                        {{ field }} {{ field.label }}
+                    </label>
+                {% else %}
+                    <label class="label" for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                {% endif %}
+
+                {% for error in field.errors %}
+                    <p class="mt-1 text-sm font-semibold"
+                       style="color: #e11d48;">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <div class="flex gap-3">
+            <button type="submit" class="btn btn-primary">
+                ذخیره تغییرات
+            </button>
+            <a href="{% url 'course_app:management_courses' %}"
+               class="btn btn-secondary">
+                بازگشت
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
